@@ -30,22 +30,29 @@
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name="org.antennae.android.notifyapp.MessageDetailActivity"
             android:label="@string/title_activity_message_detail" >
+            <intent-filter >
+                <action android:name="org.antennea.intent.notifications.alert"/>
+                <category android:name="org.antennea.category.notifications"/>
+            </intent-filter>
         </activity>
         
         <service android:name="com.parse.PushService" />
+        
 		<receiver android:name="com.parse.ParseBroadcastReceiver">
 		  <intent-filter>
 		    <action android:name="android.intent.action.BOOT_COMPLETED" />
 		    <action android:name="android.intent.action.USER_PRESENT" />
 		  </intent-filter>
 		</receiver>
+		
 		<receiver android:name="org.antennae.android.notifyapp.NotificationsReceiver"
 		    android:exported="false">
 		  <intent-filter>

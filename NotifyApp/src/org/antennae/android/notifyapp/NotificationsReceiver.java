@@ -53,8 +53,14 @@ public class NotificationsReceiver extends BroadcastReceiver {
 	}
 
 	public static void showNotification(Context context, Alert alert) {
-		final Intent notificationIntent = new Intent(context, MainActivity.class);
-		final PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, 0);
+		
+		final Intent notificationIntent = new Intent(context, MessageDetailActivity.class);
+		notificationIntent.setAction("org.antennea.intent.notifications.alert");
+		notificationIntent.addCategory("org.antennea.category.notifications");
+		notificationIntent.putExtra(MainActivity.ALERT_PARAM, alert);
+		
+		final PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+		
 
 		Builder builder = new NotificationCompat.Builder(
 				context)
@@ -80,7 +86,7 @@ public class NotificationsReceiver extends BroadcastReceiver {
 		// Builds the notification and issues it.
 		mNotifyMgr.notify(mNotificationId, notification);
 		
-		updateMyActivity(context, alert);
+		//updateMyActivity(context, alert);
 	}
 	
 	static void updateMyActivity(Context context, Alert alert) {

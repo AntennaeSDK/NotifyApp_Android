@@ -6,7 +6,10 @@ import org.antennea.android.notifyapp.model.AlertSeverityEnum;
 import org.antennae.android.notifyapp.R;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
@@ -17,13 +20,44 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class MessageDetailActivity extends Activity {
+	
+//	@Override
+//	public void onResume() {
+//	    super.onResume();
+//	    registerReceiver(mMessageReceiver, new IntentFilter(MainActivity.ALERT_NOTIFICATION_INTENT_FILTER));
+//	}
+//
+//	//Must unregister onPause()
+//	@Override
+//	protected void onPause() {
+//	    super.onPause();
+//	    unregisterReceiver(mMessageReceiver);
+//	}
+//
+//	//This is the handler that will manager to process the broadcast intent
+//	private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+//
+//		@Override
+//	    public void onReceive(Context context, Intent intent) {
+//
+//			// Extract data included in the Intent
+//	        Alert alert = (Alert) intent.getSerializableExtra(MainActivity.ALERT_PARAM);
+//
+//	    }
+//	};
+	
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_message_detail);
 		
-		Alert alert = (Alert) getIntent().getSerializableExtra(MainActivity.ALERT_PARAM);
+		Intent intent = getIntent();
+		
+		Alert alert = (Alert) intent.getSerializableExtra(MainActivity.ALERT_PARAM);
+		
+		//Alert alert = (Alert) getIntent().getSerializableExtra(MainActivity.ALERT_PARAM);
 		
 		setTitle("");
 		

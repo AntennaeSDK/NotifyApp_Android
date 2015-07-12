@@ -24,6 +24,7 @@ import com.parse.ParseAnalytics;
 
 
 public class MainActivity extends Activity {
+	
 	public static final String ALERT_PARAM = "alert";
 	public static final String ALERT_NOTIFICATION_INTENT_FILTER = "ALERT_NOTIFICATION_INTENT_FILTER";
 	
@@ -45,8 +46,10 @@ public class MainActivity extends Activity {
 
 	//This is the handler that will manager to process the broadcast intent
 	private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
-	    @Override
+	    
+		@Override
 	    public void onReceive(Context context, Intent intent) {
+	    	
 	        // Extract data included in the Intent
 	        Alert alert = (Alert) intent.getSerializableExtra(ALERT_PARAM);
 
@@ -55,12 +58,19 @@ public class MainActivity extends Activity {
 		        alertsAdapter.insert(alert, 0);
 	        }
 	    }
+		
 	};
+	
 	private AlertAdapter alertsAdapter;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+    	
         super.onCreate(savedInstanceState);
+        
+        Intent intent = getIntent();
+        
+        
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
         
         setContentView(R.layout.activity_main);
@@ -83,12 +93,19 @@ public class MainActivity extends Activity {
     private void populateAlerts() {
 		alerts = new ArrayList<Alert>();
 		
-		for(int i=0;i<10;i++) {
-			Alert alert = new Alert("title" + i, "message " + i, AlertSeverityEnum.values()[i%5].toString(), "action" + i);
-			alerts.add(alert);
-		}
+//		for(int i=0;i<10;i++) {
+//			Alert alert = new Alert("title" + i, "message " + i, AlertSeverityEnum.values()[i%5].toString(), "action" + i);
+//			alerts.add(alert);
+//		}
+		
+		Alert alert1 = new Alert("High I/O on ADP Apps", "ADP backend has abnormally high IO", AlertSeverityEnum.HIGH.toString(), "Join the bridge on 1-873-555-3846 #556");
+		Alert alert2 = new Alert("MySQL index issue", "MySql index is slower on quote system", AlertSeverityEnum.SEVERE.toString(), "Join the bridge on 1-873-555-3846 #598");
+		
+		alerts.add( alert1 );
+		alerts.add( alert2 );
 		
 		alertsAdapter = new AlertAdapter(this, alerts);
+		
 		// Attach the adapter to a ListView
 		lvMessages.setAdapter(alertsAdapter);
 	}
