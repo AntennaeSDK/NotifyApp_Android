@@ -86,7 +86,7 @@ public class NotificationsReceiver extends BroadcastReceiver {
 		// Builds the notification and issues it.
 		mNotifyMgr.notify(mNotificationId, notification);
 		
-		//updateMyActivity(context, alert);
+		updateMyActivity(context, alert);
 	}
 	
 	static void updateMyActivity(Context context, Alert alert) {
