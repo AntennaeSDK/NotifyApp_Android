@@ -1,4 +1,4 @@
-package org.antennea.android.notifyapp.model;
+package org.antennae.android.notifyapp.model;
 
 import java.io.Serializable;
 import java.util.Date;

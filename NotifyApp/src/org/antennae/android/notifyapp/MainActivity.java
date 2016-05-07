@@ -1,11 +1,5 @@
 package org.antennae.android.notifyapp;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.antennea.android.notifyapp.model.Alert;
-import org.antennea.android.notifyapp.model.AlertSeverityEnum;
-
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -19,96 +13,99 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
-import org.antennae.android.notifyapp.R;
 import com.parse.ParseAnalytics;
+
+import org.antennae.android.notifyapp.model.Alert;
+import org.antennae.android.notifyapp.model.AlertSeverityEnum;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainActivity extends Activity {
-	
-	public static final String ALERT_PARAM = "alert";
-	public static final String ALERT_NOTIFICATION_INTENT_FILTER = "ALERT_NOTIFICATION_INTENT_FILTER";
-	
-	ListView lvMessages;
-	private List<Alert> alerts;
-	
-	@Override
-	public void onResume() {
-	    super.onResume();
-	    registerReceiver(mMessageReceiver, new IntentFilter(ALERT_NOTIFICATION_INTENT_FILTER));
-	}
 
-	//Must unregister onPause()
-	@Override
-	protected void onPause() {
-	    super.onPause();
-	    unregisterReceiver(mMessageReceiver);
-	}
+    public static final String ALERT_PARAM = "alert";
+    public static final String ALERT_NOTIFICATION_INTENT_FILTER = "ALERT_NOTIFICATION_INTENT_FILTER";
 
-	//This is the handler that will manager to process the broadcast intent
-	private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
-	    
-		@Override
-	    public void onReceive(Context context, Intent intent) {
-	    	
-	        // Extract data included in the Intent
-	        Alert alert = (Alert) intent.getSerializableExtra(ALERT_PARAM);
+    ListView lvMessages;
+    private List<Alert> alerts;
+    private AlertAdapter alertsAdapter;
+    //This is the handler that will manager to process the broadcast intent
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
 
-	        if(alertsAdapter.getPosition(alert) == -1) {
-		        //do other stuff here
-		        alertsAdapter.insert(alert, 0);
-	        }
-	    }
-		
-	};
-	
-	private AlertAdapter alertsAdapter;
-	
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            // Extract data included in the Intent
+            Alert alert = (Alert) intent.getSerializableExtra(ALERT_PARAM);
+
+            if (alertsAdapter.getPosition(alert) == -1) {
+                //do other stuff here
+                alertsAdapter.insert(alert, 0);
+            }
+        }
+
+    };
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        registerReceiver(mMessageReceiver, new IntentFilter(ALERT_NOTIFICATION_INTENT_FILTER));
+    }
+
+    //Must unregister onPause()
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(mMessageReceiver);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-    	
+
         super.onCreate(savedInstanceState);
-        
+
         Intent intent = getIntent();
-        
-        
+
+
         ParseAnalytics.trackAppOpenedInBackground(getIntent());
-        
+
         setContentView(R.layout.activity_main);
-        
+
         lvMessages = (ListView) findViewById(R.id.lvMessages);
-        
+
         populateAlerts();
-        
+
         lvMessages.setOnItemClickListener(new OnItemClickListener() {
 
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				Intent i = new Intent(MainActivity.this, MessageDetailActivity.class);
-				i.putExtra(ALERT_PARAM, alerts.get(position));
-				startActivity(i);
-			}
-		});
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent i = new Intent(MainActivity.this, MessageDetailActivity.class);
+                i.putExtra(ALERT_PARAM, alerts.get(position));
+                startActivity(i);
+            }
+        });
     }
-    
+
     private void populateAlerts() {
-		alerts = new ArrayList<Alert>();
-		
+        alerts = new ArrayList<Alert>();
+
 //		for(int i=0;i<10;i++) {
 //			Alert alert = new Alert("title" + i, "message " + i, AlertSeverityEnum.values()[i%5].toString(), "action" + i);
 //			alerts.add(alert);
 //		}
-		
-		Alert alert1 = new Alert("High I/O on ADP Apps", "ADP backend has abnormally high IO", AlertSeverityEnum.HIGH.toString(), "Join the bridge on 1-873-555-3846 #556");
-		Alert alert2 = new Alert("MySQL index issue", "MySql index is slower on quote system", AlertSeverityEnum.SEVERE.toString(), "Join the bridge on 1-873-555-3846 #598");
-		
-		alerts.add( alert1 );
-		alerts.add( alert2 );
-		
-		alertsAdapter = new AlertAdapter(this, alerts);
-		
-		// Attach the adapter to a ListView
-		lvMessages.setAdapter(alertsAdapter);
-	}
+
+        Alert alert1 = new Alert("High I/O on ADP Apps", "ADP backend has abnormally high IO", AlertSeverityEnum.HIGH.toString(), "Join the bridge on 1-873-555-3846 #556");
+        Alert alert2 = new Alert("MySQL index issue", "MySql index is slower on quote system", AlertSeverityEnum.SEVERE.toString(), "Join the bridge on 1-873-555-3846 #598");
+
+        alerts.add(alert1);
+        alerts.add(alert2);
+
+        alertsAdapter = new AlertAdapter(this, alerts);
+
+        // Attach the adapter to a ListView
+        lvMessages.setAdapter(alertsAdapter);
+    }
 
 
     @Override
